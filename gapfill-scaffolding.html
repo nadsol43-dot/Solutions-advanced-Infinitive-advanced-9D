@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaffolding pack — Chickasaw gap-fill (advanced infinitive)</title>
+<style>
+  :root{
+    --paper:#FFF6EC; --ink:#231F2B; --soft:#5B5566; --line:#EADFCE; --card:#fff;
+    --teal:#0E7C6B; --tealbg:#DFF3EE;
+    --c1:#E0483F;  /* only          */
+    --c2:#7B4BD8;  /* noun / the last */
+    --c3:#D98207;  /* too / enough  */
+    --c4:#1F8FBF;  /* so ... as     */
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Segoe UI",Inter,system-ui,-apple-system,Arial,sans-serif;
+    padding:26px 16px 60px;line-height:1.5}
+  .page{max-width:900px;margin:0 auto}
+
+  header{background:linear-gradient(115deg,#FF8A3D,#F2542D 50%,#D63A56);color:#fff;
+    border-radius:22px;padding:22px 26px;position:relative;overflow:hidden;
+    box-shadow:0 16px 34px -20px rgba(214,58,86,.5)}
+  header:after{content:"";position:absolute;right:-50px;top:-60px;width:190px;height:190px;
+    border-radius:50%;background:rgba(255,255,255,.10)}
+  .kick{font-size:11px;letter-spacing:.16em;font-weight:800;text-transform:uppercase;
+    background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);
+    padding:5px 11px;border-radius:999px;display:inline-block}
+  h1{margin:11px 0 5px;font-size:27px;line-height:1.15;font-weight:800}
+  .sub{margin:0;font-size:14.5px;opacity:.95;max-width:70ch}
+
+  .step{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:20px 24px;box-shadow:0 12px 26px -22px rgba(60,40,20,.6)}
+  .steptop{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .badge{flex:0 0 auto;width:32px;height:32px;border-radius:10px;background:var(--accent,#F2542D);
+    color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px}
+  h2{margin:0;font-size:18.5px}
+  .why{margin:6px 0 14px;font-size:13px;color:var(--soft);font-style:italic}
+  .goal{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--soft);background:#FBF6F0;border:1px solid var(--line);border-radius:999px;padding:3px 10px;margin-left:auto}
+
+  /* verb bank */
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);
+    padding:0 8px 7px;font-weight:800}
+  td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+  td.v{font-weight:800;white-space:nowrap;color:var(--accent)}
+  .tick{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--soft)}
+
+  /* matching */
+  .match{display:grid;grid-template-columns:1fr;gap:8px}
+  .mrow{display:flex;align-items:center;gap:10px;font-size:14.5px;padding:7px 10px;border:1px solid var(--line);
+    border-radius:12px;background:#FBF6F0}
+  .mrow .n{font-weight:800;color:var(--soft);font-size:12px;width:16px}
+  .mrow .sent{flex:1}
+  .mrow select{font-size:13.5px;padding:5px 8px;border-radius:9px;border:1px solid var(--line);background:#fff;min-width:190px}
+  .pat{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 9px;margin-left:6px}
+  .p1{background:#FDE7E6;color:var(--c1)} .p2{background:#EFE9FD;color:var(--c2)}
+  .p3{background:#FDF0DC;color:var(--c3)} .p4{background:#E4F1F8;color:var(--c4)}
+
+  /* surgery cards */
+  .surg{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;
+    background:#fff;border-left:5px solid var(--accent)}
+  .surg .q{font-size:14.5px;margin:0 0 4px}
+  .surg .q b{color:var(--accent)}
+  .ctx{font-size:13px;color:var(--soft);font-style:italic;margin:0 0 8px}
+  .clue{font-size:13px;background:#FBF6F0;border:1px dashed var(--line);border-radius:10px;
+    padding:7px 10px;margin-bottom:8px}
+  .clue b{color:var(--ink)}
+  .opts{display:flex;flex-wrap:wrap;gap:7px}
+  .opt{font-size:14px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:#fff}
+  .optb{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px}
+
+  /* supported text */
+  .text{font-size:16px;line-height:2.35;background:#fff}
+  .gap{display:inline-block;min-width:120px;border-bottom:2px solid var(--accent);
+    vertical-align:baseline;margin:0 2px}
+  .gap.two{min-width:75px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:800;color:#fff;background:var(--accent);
+    border-radius:6px;padding:1px 6px;margin:0 3px;vertical-align:middle;letter-spacing:.03em}
+  .keystrip{margin-top:12px;font-size:12.5px;color:var(--soft);background:#FBF6F0;border-radius:12px;
+    padding:10px 12px;border:1px solid var(--line)}
+
+  /* clean task */
+  .clean{font-size:16px;line-height:2.3}
+  .verbbox{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+  .vb{font-weight:800;font-size:14px;border:1px solid var(--line);background:#FBF6F0;border-radius:999px;padding:4px 12px}
+
+  /* answers */
+  .answers{margin-top:24px;border-top:3px dashed var(--line);padding-top:18px}
+  .ans{font-size:14.5px;padding:8px 0;border-bottom:1px dotted var(--line)}
+  .ans b{color:var(--teal)}
+  .ans code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--tealbg);
+    color:var(--teal);border-radius:6px;padding:1px 6px;font-weight:700}
+  .note{background:#FFF8E8;border:1px solid #F2E2BE;border-radius:12px;padding:10px 12px;font-size:13px;margin-top:14px}
+  .note b{color:#8A6A16}
+  ul.flow{margin:8px 0 0;padding-left:20px;font-size:14px}
+  ul.flow li{margin-bottom:5px}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .step,.answers{break-inside:avoid;page-break-inside:avoid}
+    .answers{page-break-before:always}
+    header{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <span class="kick">Scaffolding pack · advanced infinitive</span>
+    <h1>The Chickasaw gap-fill — built up in 5 steps</h1>
+    <p class="sub">Same task as the book, but the support is taken away slowly. Steps 1–3 are <b>recognition</b> (she chooses), step 4 is <b>supported production</b>, step 5 is the real thing.</p>
+  </header>
+
+  <!-- ================= STEP 1 ================= -->
+  <section class="step" style="--accent:#F2542D">
+    <div class="steptop"><div class="badge">1</div><h2>Meet the six verbs</h2>
+      <span class="goal">Goal: no unknown words</span></div>
+    <p class="why">Before any grammar: make sure every verb in the box is a word she can explain. If she can't say what it means, the gap can't be solved.</p>
+    <table>
+      <tr><th>Verb</th><th>Meaning (her words)</th><th>Goes with…</th></tr>
+      <tr style="--accent:var(--c2)"><td class="v">pass on</td><td>give to the next generation</td><td class="tick">a culture / a language / a story</td></tr>
+      <tr style="--accent:var(--c1)"><td class="v">discover</td><td>find out something new (often bad news)</td><td class="tick">that + clause · <i>only to discover</i></td></tr>
+      <tr style="--accent:var(--c3)"><td class="v">use</td><td>operate / work with something</td><td class="tick">an app / a book / a language</td></tr>
+      <tr style="--accent:var(--c4)"><td class="v">study</td><td>learn on purpose, at a desk</td><td class="tick">a subject / a language</td></tr>
+      <tr style="--accent:var(--c3)"><td class="v">motivate</td><td>make someone <i>want</i> to do something</td><td class="tick">young people / students</td></tr>
+      <tr style="--accent:var(--c2)"><td class="v">speak</td><td>say words in a language</td><td class="tick">a language · <i>the last person to speak…</i></td></tr>
+    </table>
+    <div class="note"><b>Teacher:</b> cover the middle column and ask her to explain each verb in her own words (L1 is fine). Only move on when all six are solid. 3 minutes.</div>
+  </section>
+
+  <!-- ================= STEP 2 ================= -->
+  <section class="step" style="--accent:#F2542D">
+    <div class="steptop"><div class="badge">2</div><h2>Which of the four patterns is it?</h2>
+      <span class="goal">Goal: recognition only</span></div>
+    <p class="why">Every gap is one of the four patterns from the poster. Here she only has to <b>name</b> the pattern — no writing. This is the step that makes the rest possible.</p>
+    <div class="match">
+      <div class="mrow"><span class="n">1</span><span class="sent">He realised he had a culture <b>______</b>.</span>
+        <select><option>choose…</option><option>noun + to V (the shortcut)</option><option>only + to V (the twist)</option><option>too / enough (the limit)</option><option>so + adj + as (result)</option></select></div>
+      <div class="mrow"><span class="n">2</span><span class="sent">He decided to learn more, <b>______</b> that fewer than 100 people spoke it.</span>
+        <select><option>choose…</option><option>noun + to V (the shortcut)</option><option>only + to V (the twist)</option><option>too / enough (the limit)</option><option>so + adj + as (result)</option></select></div>
+      <div class="mrow"><span class="n">3</span><span class="sent">For ordinary speakers, a grammar book would be <b>___</b> technical <b>___</b>.</span>
+        <select><option>choose…</option><option>noun + to V (the shortcut)</option><option>only + to V (the twist)</option><option>too / enough (the limit)</option><option>so + adj + as (result)</option></select></div>
+      <div class="mrow"><span class="n">4</span><span class="sent">They weren't <b>so</b> interested in Chickasaw <b>______</b> it outside school.</span>
+        <select><option>choose…</option><option>noun + to V (the shortcut)</option><option>only + to V (the twist)</option><option>too / enough (the limit)</option><option>so + adj + as (result)</option></select></div>
+      <div class="mrow"><span class="n">5</span><span class="sent">He made an app attractive <b>______</b> young people to want to use it.</span>
+        <select><option>choose…</option><option>noun + to V (the shortcut)</option><option>only + to V (the twist)</option><option>too / enough (the limit)</option><option>so + adj + as (result)</option></select></div>
+      <div class="mrow"><span class="n">6</span><span class="sent">The very <b>___</b> person <b>___</b> only Chickasaw died in 2013.</span>
+        <select><option>choose…</option><option>noun + to V (the shortcut)</option><option>only + to V (the twist)</option><option>too / enough (the limit)</option><option>so + adj + as (result)</option></select></div>
+    </div>
+    <div class="keystrip"><b>Pattern key:</b>
+      <span class="pat p1">only + to V</span> disappointing result ·
+      <span class="pat p2">noun / the last + to V</span> replaces a relative clause ·
+      <span class="pat p3">too / enough + to V</span> the limit line ·
+      <span class="pat p4">so + adj + as + to V</span> degree → result
+    </div>
+    <div class="note"><b>Teacher:</b> the colour of each pattern matches the poster, so she can look at it while she works. There are <b>two</b> of each kind except "only" and "so…as".</div>
+  </section>
+
+  <!-- ================= STEP 3 ================= -->
+  <section class="step" style="--accent:#F2542D">
+    <div class="steptop"><div class="badge">3</div><h2>One gap at a time — pick the phrase</h2>
+      <span class="goal">Goal: choose, don't invent</span></div>
+    <p class="why">The whole text is too much at once. Here each gap sits in its own sentence, with the sentence before it for context, a clue question, and three choices.</p>
+
+    <div class="surg" style="--accent:var(--c2)">
+      <p class="ctx">Before: <i>His first son was born.</i></p>
+      <p class="q">He then realised he had a culture <b>______</b>, but was unable to do so.</p>
+      <div class="clue"><b>Clue:</b> "do so" refers back to a verb. What do you do with a culture? → give it to your children. A noun followed by an infinitive = <span class="pat p2">noun + to V</span></div>
+      <div class="opts"><span class="opt optb">a) to pass on</span><span class="opt optb">b) passing on</span><span class="opt optb">c) for pass on</span></div>
+    </div>
+
+    <div class="surg" style="--accent:var(--c1)">
+      <p class="ctx">Before: <i>He decided to learn more.</i></p>
+      <p class="q">He decided to learn more, <b>______</b> that fewer than 100 members of his tribe were fluent.</p>
+      <div class="clue"><b>Clue:</b> good news or bad news? He wanted to learn… and found out almost nobody speaks it. → <span class="pat p1">only + to V</span> = disappointing surprise.</div>
+      <div class="opts"><span class="opt optb">a) only to discover</span><span class="opt optb">b) to discover</span><span class="opt optb">c) discovering</span></div>
+    </div>
+
+    <div class="surg" style="--accent:var(--c3)">
+      <p class="ctx">Before: <i>He decided not to write a grammar book.</i></p>
+      <p class="q">For ordinary speakers, that would be <b>___</b> technical <b>___</b>.</p>
+      <div class="clue"><b>Clue:</b> two blanks, three words. The word <i>technical</i> is already there. Which limit word goes in front of an adjective? → <span class="pat p3">too + adj + to V</span>. <b>Careful:</b> one word before, two words after.</div>
+      <div class="opts"><span class="opt optb">a) too … to use</span><span class="opt optb">b) enough … to use</span><span class="opt optb">c) so … that use</span></div>
+    </div>
+
+    <div class="surg" style="--accent:var(--c4)">
+      <p class="ctx">Before: <i>He wanted to engage young people — a hard job.</i></p>
+      <p class="q">They weren't <b>so</b> interested in Chickasaw <b>______</b> it outside school.</p>
+      <div class="clue"><b>Clue:</b> the word <i>so</i> is already in the sentence. When you see <i>so + adjective</i>, what word usually follows? → <span class="pat p4">so + adj + as + to V</span>.</div>
+      <div class="opts"><span class="opt optb">a) as to study</span><span class="opt optb">b) enough to study</span><span class="opt optb">c) for studying</span></div>
+    </div>
+
+    <div class="surg" style="--accent:var(--c3)">
+      <p class="ctx">Before: <i>He created a Chickasaw learning app.</i></p>
+      <p class="q">He created an app that was attractive <b>______</b> young people to want to use it.</p>
+      <div class="clue"><b>Clue:</b> "attractive" is already the adjective, so the limit word comes <b>after</b> it. Which one means "reaching the level"? → <span class="pat p3">adj + enough + to V</span>. Note the second <i>to</i>: <i>to want to use</i>.</div>
+      <div class="opts"><span class="opt optb">a) enough to motivate</span><span class="opt optb">b) too to motivate</span><span class="opt optb">c) so as motivate</span></div>
+    </div>
+
+    <div class="surg" style="--accent:var(--c2)">
+      <p class="ctx">Before: <i>The app was a hit; the future looks brighter.</i></p>
+      <p class="q">The very <b>___</b> person <b>___</b> only Chickasaw died in 2013.</p>
+      <div class="clue"><b>Clue:</b> two blanks again. After "the very", which word means "final"? Then: the last person <i>who did what?</i> → <span class="pat p2">the last + to V</span>. One word in the first blank, two in the second.</div>
+      <div class="opts"><span class="opt optb">a) last … to speak</span><span class="opt optb">b) first … to speak</span><span class="opt optb">c) last … speaking</span></div>
+    </div>
+
+    <div class="note"><b>Teacher:</b> she should say the whole finished sentence out loud after each choice — the ear catches what the eye misses. If she picks a distractor, ask <i>"why not the other two?"</i> before you explain.</div>
+  </section>
+
+  <!-- ================= STEP 4 ================= -->
+  <section class="step" style="--accent:#F2542D">
+    <div class="steptop"><div class="badge">4</div><h2>The full text — with the clues still on</h2>
+      <span class="goal">Goal: write, with support</span></div>
+    <p class="why">Now the whole text, but every gap still carries its pattern label and a box for each of the three words. Count the boxes: if she has written two, one is missing.</p>
+
+    <div class="text">
+      Joshua Hinson of the Chickasaw Nation was not concerned with speaking the language of his
+      people until his first son was born. He then realised he had a culture
+      <span class="tag" style="--accent:var(--c2)">noun + to V</span><span class="gap" style="--accent:var(--c2)"></span>,
+      but was unable to do so with the few Chickasaw words he knew. He decided to learn more,
+      <span class="tag" style="--accent:var(--c1)">only + to V</span><span class="gap" style="--accent:var(--c1)"></span>
+      that fewer than 100 members of his tribe were fluent in Chickasaw and they were all over 60.
+      Hinson resolved to try to save his ancestral language. He decided not to write a grammar book
+      because, for ordinary speakers, that would be
+      <span class="tag" style="--accent:var(--c3)">too + adj + to V</span><span class="gap two" style="--accent:var(--c3)"></span>
+      technical <span class="gap two" style="--accent:var(--c3)"></span>. Instead he tried to find a way to
+      engage the young in his project, no mean feat considering they weren't so interested in Chickasaw
+      <span class="tag" style="--accent:var(--c4)">so + adj + as + to V</span><span class="gap" style="--accent:var(--c4)"></span>
+      it outside school. He created a Chickasaw learning app that was attractive
+      <span class="tag" style="--accent:var(--c3)">adj + enough + to V</span><span class="gap" style="--accent:var(--c3)"></span>
+      young people to want to use it. The app was an instant hit and now the future of Chickasaw
+      looks brighter. The very
+      <span class="tag" style="--accent:var(--c2)">the last + to V</span><span class="gap two" style="--accent:var(--c2)"></span>
+      person <span class="gap two" style="--accent:var(--c2)"></span>
+      only Chickasaw died in 2013, but thanks to Hinson, the language did not die with her.
+    </div>
+
+    <div class="keystrip"><b>Counting rule:</b> every gap is exactly <b>three words</b>. Gaps 3 and 6 are
+      <b>split</b> — the three words go in two different blanks (1 + 2). If a blank she filled sounds
+      complete on its own, check the other half.</div>
+    <div class="note"><b>Support you can remove later:</b> ① fold the page so the coloured labels are hidden ·
+      ② give her the first letters (<i>t__ p___ o__</i>) · ③ give her the six verbs on cards and let her
+      arrange them physically before writing.</div>
+  </section>
+
+  <!-- ================= STEP 5 ================= -->
+  <section class="step" style="--accent:#F2542D">
+    <div class="steptop"><div class="badge">5</div><h2>The real task — just like the book</h2>
+      <span class="goal">Goal: independent</span></div>
+    <p class="why">Complete the text. Write three words and include a verb from the list below in each gap.</p>
+    <div class="verbbox"><span class="vb">discover</span><span class="vb">motivate</span><span class="vb">pass on</span><span class="vb">speak</span><span class="vb">study</span><span class="vb">use</span></div>
+    <div class="clean">
+      Joshua Hinson of the Chickasaw Nation was not concerned with speaking the language of his
+      people until his first son was born. He then realised he had a culture
+      <span class="gap" style="--accent:#8B8497"></span>, but was unable to do so with the few
+      Chickasaw words he knew. He decided to learn more, <span class="gap" style="--accent:#8B8497"></span>
+      that fewer than 100 members of his tribe were fluent in Chickasaw and they were all over 60.
+      Hinson resolved to try to save his ancestral language. He decided not to write a grammar book
+      because, for ordinary speakers, that would be <span class="gap two" style="--accent:#8B8497"></span>
+      technical <span class="gap two" style="--accent:#8B8497"></span>. Instead he tried to find a way to
+      engage the young in his project, no mean feat considering they weren't so interested in Chickasaw
+      <span class="gap" style="--accent:#8B8497"></span> it outside school. He created a Chickasaw
+      learning app that was attractive <span class="gap" style="--accent:#8B8497"></span> young people to
+      want to use it. The app was an instant hit and now the future of Chickasaw looks brighter. The very
+      <span class="gap two" style="--accent:#8B8497"></span> person <span class="gap two" style="--accent:#8B8497"></span>
+      only Chickasaw died in 2013, but thanks to Hinson, the language did not die with her.
+    </div>
+    <div class="note"><b>Tip for her:</b> read the sentence after the gap too. In three of these gaps,
+      the answer only makes sense once you've read what comes next.</div>
+  </section>
+
+  <!-- ================= ANSWERS ================= -->
+  <section class="answers">
+    <h2 style="font-size:20px;margin:0 0 4px">Answer key &amp; teacher notes</h2>
+    <p style="font-size:13px;color:var(--soft);margin:0 0 14px">Tear off / don't print this page for the student.</p>
+
+    <div class="ans"><b>1</b> — <code>to pass on</code> · <i>He had a culture to pass on.</i>
+      Noun + to V: the infinitive replaces “a culture <b>that he could pass on</b>”. The words “do so” two lines later are the give-away.</div>
+    <div class="ans"><b>2</b> — <code>only to discover</code> · Disappointing result. Not plain <i>to discover</i>: the surprise is the point.</div>
+    <div class="ans"><b>3</b> — <code>too</code> … <code>to use</code> · Split gap: <i>too</i> before “technical”, <i>to use</i> after it. Order: too + adj + to V.</div>
+    <div class="ans"><b>4</b> — <code>as to study</code> · <i>so</i> is already in the text, so the gap is “as to + V”. Meaning: their interest never reached that level.</div>
+    <div class="ans"><b>5</b> — <code>enough to motivate</code> · adjective + enough + to V. Two infinitives in a row is normal here: <i>to motivate… to want… to use</i>.</div>
+    <div class="ans"><b>6</b> — <code>last</code> … <code>to speak</code> · Split gap: “the very <b>last</b> person <b>to speak</b> only Chickasaw”. The last + to V.</div>
+
+    <div class="note"><b>Why this task is hard (and what the steps do about it):</b>
+      <ul class="flow">
+        <li><b>Six verbs, six gaps, but the verbs are not the answer</b> — she must add helper words (<i>only, too, enough, as, the last</i>). Step 2 makes those helpers the focus.</li>
+        <li><b>Gaps 3 and 6 are split</b> — the three words are not together. Step 4 says this out loud; the book doesn't.</li>
+        <li><b>Two infinitives in a row</b> (gap 5: <i>…to motivate young people to want to use it</i>) sound wrong to a learner's ear. Say it aloud in step 3.</li>
+        <li><b>Hard vocabulary</b> (<i>ancestral, no mean feat, engage, fluent</i>) is not tested, so pre-teach or gloss it — don't let it eat the grammar time.</li>
+      </ul>
+    </div>
+
+    <div class="note" style="background:#EAF7F4;border-color:#BFE4DC">
+      <b>Suggested 35-minute flow:</b>
+      <ul class="flow">
+        <li><b>0–5 min</b> Step 1 — verbs, orally. Plus 2 minutes on the story: “a man trying to save a language”.</li>
+        <li><b>5–12 min</b> Step 2 — pattern naming only. She uses the poster as a reference.</li>
+        <li><b>12–22 min</b> Step 3 — one gap at a time, she says each finished sentence aloud.</li>
+        <li><b>22–30 min</b> Step 4 — full text with labels; you fade the support as she goes.</li>
+        <li><b>30–35 min</b> Step 5 — the book page, cold. It usually looks easy by now.</li>
+      </ul>
+      <b>If she still stalls:</b> go back to step 3, cover the wrong options, and give her the six verb cards
+      plus helper-word cards (<i>only · too · enough · as · the last · to</i>) to arrange by hand.
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
